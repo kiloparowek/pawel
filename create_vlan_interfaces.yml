@@ -1,0 +1,11 @@
+---
+
+- name: PLAY 1 - Create VLAN Interfaces
+  connection: local
+#  hosts: localhost
+  hosts: device_roles_access
+  gather_facts: False
+
+  roles:
+    - role: create_vlan_interfaces 
+      tags: create_vlan_interfaces 

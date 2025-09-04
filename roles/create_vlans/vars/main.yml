@@ -1,0 +1,53 @@
+---
+vlans:
+
+  - name: DATA
+    site: lab_test_env
+    status: reserved
+    tenant: Consulting
+    vid: 300
+    vlan_group: lab_test_env_VLANS
+    vlan_role: Branch_Data
+
+  - name: VOICE
+    site: lab_test_env
+    status: reserved
+    tenant: Consulting
+    vid: 301
+    vlan_group: lab_test_env_VLANS
+    vlan_role: Branch_Voice
+
+  - name: B_WIFI
+    site: lab_test_env
+    status: reserved
+    tenant: Consulting
+    vid: 302
+    vlan_group: lab_test_env_VLANS
+    vlan_role: Branch_WiFi
+
+  - name: G_WIFI
+    site: lab_test_env
+    status: reserved
+    tenant: Consulting
+    vid: 40
+    vlan_group: lab_test_env_VLANS
+    vlan_role: Guest_WiFi
+
+  - name: NETMAN
+    site: lab_test_env
+    status: reserved
+    tenant: Consulting
+    vid: 50
+    vlan_group: lab_test_env_VLANS
+    vlan_role: Network_Management
+
+  - name: P2P
+    site: lab_test_env
+    status: reserved
+    tenant: Consulting
+    vid: 60
+    vlan_group: lab_test_env_VLANS
+    vlan_role: Point_to_Point
+
+
+

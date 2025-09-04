@@ -1,0 +1,8 @@
+---
+supernet_prefixes:
+
+  - prefix: 192.168.0.0/22
+    status: reserved
+    description: Test-ENV Site Supernet
+    site: lab_test_env
+    tenant: Consulting

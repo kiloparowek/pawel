@@ -1,0 +1,6 @@
+---
+vlan_groups:
+
+  - name: lab_test_env_VLANS
+    scope_type: dcim.site
+    scope: lab_test_env

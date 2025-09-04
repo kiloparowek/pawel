@@ -1,0 +1,18 @@
+plugin: netbox.netbox.nb_inventory
+api_endpoint: http://192.168.1.7:8000
+token: b3b3d17376a0362ad9e3750765bead41b6e869b8
+validate_certs: False
+
+group_by:
+  - device_roles
+  - sites
+
+# Set default connection info
+ansible_user: admin
+ansible_password: cisco
+ansible_become: yes
+ansible_become_method: enable
+ansible_become_password: cisco
+ansible_network_os: ios
+ansible_connection: network_cli
+ansible_ssh_common_args: '-o StrictHostKeyChecking=no'

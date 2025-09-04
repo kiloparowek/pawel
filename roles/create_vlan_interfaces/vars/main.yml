@@ -1,0 +1,32 @@
+---
+interfaces:
+
+  - device: Test-Env-Access_sw01
+    enabled: yes
+    type: virtual
+    name: vlan.300
+
+  - device: Test-Env-Access_sw01
+    enabled: yes
+    type: virtual
+    name: vlan.301
+
+  - device: Test-Env-Access_sw01
+    enabled: yes
+    type: virtual
+    name: vlan.302
+
+  - device: Test-Env-Access_sw02
+    enabled: yes
+    type: virtual
+    name: vlan.300
+
+  - device: Test-Env-Access_sw02
+    enabled: yes
+    type: virtual
+    name: vlan.301
+
+  - device: Test-Env-Access_sw02
+    enabled: yes
+    type: virtual
+    name: vlan.302
