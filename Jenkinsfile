@@ -4,6 +4,7 @@ pipeline {
         NETBOX_TOKEN = '2d13b3e7d3bdff08860575e61619046aab51cd40'
         NETBOX_API   = 'http://192.168.1.7:8000/api/'
     }
+    #pawel test
     stages {
         stage('Checkout') {
             steps {
