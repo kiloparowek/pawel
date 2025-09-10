@@ -1,5 +1,4 @@
-
-#jinja2: lstrip_blocks: True
+#jinja2: lstrip_blocks: True, trim_blocks: True
 no service pad
 service tcp-keepalives-in
 service tcp-keepalives-out
@@ -24,40 +23,63 @@ vrf definition Mgmt-intf
  address-family ipv6
  exit-address-family
 !
-security authentication failure rate 5 log
-logging count
-no logging message-counter syslog
-logging userinfo
-logging buffered notifications
-!
 aaa new-model
-!
 no ip bootp server
-{% for name_server in device.json.results[0].config_context['name-servers'] %}
-ip name-server {{ name_server }}
-{% endfor %}
-!
 spanning-tree extend system-id
-!
 redundancy
  mode none
-!
 lldp run
 !
+
 {% for intf in interfaces.json.results %}
+
+{% set intf_ips = ip_addresses.json.results
+    | selectattr('assigned_object.name', 'equalto', intf.name) | list %}
+{% set has_ip = intf_ips | length > 0 %}
+
+{% if intf.name.startswith('vlan.') %}
+interface vlan {{ intf.name.split('.')[1] }}
+{% else %}
 interface {{ intf.name }}
-  {% if intf.description %}
-  description {{ intf.description | safe }}
-  {% endif %}
-  {% for ip in ip_addresses.json.results %}
-    {% if ip.assigned_object.name == intf.name %}
+{% endif %}
+
+{% if intf.description %}
+  description {{ intf.description }}
+{% endif %}
+
+{% if intf.name.startswith('vlan.') %}
+  {% for ip in intf_ips %}
   ip address {{ ip.address.split('/')[0] }} {{ ip.address | ansible.utils.ipaddr('netmask') }}
-    {% endif %}
   {% endfor %}
   no shutdown
+
+{% else %}
+  {% if has_ip %}
+  no switchport
+    {% for ip in intf_ips %}
+  ip address {{ ip.address.split('/')[0] }} {{ ip.address | ansible.utils.ipaddr('netmask') }}
+    {% endfor %}
+  no shutdown
+
+  {% elif intf.mode and intf.mode.value == "access" %}
+  switchport mode access
+  switchport access vlan {{ intf.untagged_vlan.vid }}
+  no shutdown
+
+  {% elif intf.mode and intf.mode.value in ["tagged", "tagged-all"] %}
+  switchport mode trunk
+    {% if intf.tagged_vlans %}
+  switchport trunk allowed vlan {{ intf.tagged_vlans | map(attribute='vid') | join(',') }}
+    {% endif %}
+  no shutdown
+
+  {% else %}
+  shutdown
+  {% endif %}
+{% endif %}
 !
 {% endfor %}
-!
+
 snmp-server community {{ device.json.results[0].config_context['snmp-ro-community'] }} RO
 {% set latitude = site.json.results[0]['latitude'] %}
 {% set longitude = site.json.results[0]['longitude'] %}
@@ -92,11 +114,13 @@ aaa group server tacacs+ Techit_Tac_Grp
 !!! Change to MGMT VLAN, use only if required !!!
 !!! ip tacacs source-interface vlan 300
 !
+{% for name_server in device.json.results[0].config_context['name-servers'] %}
+ip name-server {{ name_server }}
+{% endfor %}
+!
 line con 0
  logging synchronous
  stopbits 1
 line aux 0
  stopbits 1
-!
 end
-
