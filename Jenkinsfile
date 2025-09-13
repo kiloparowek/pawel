@@ -6,6 +6,7 @@ pipeline {
     }
     stages {
         stage('build the application') {
+            python3 -m venv venv
             steps {
                 sh '''#!/bin/bash
                 '''
