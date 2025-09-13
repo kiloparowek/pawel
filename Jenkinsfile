@@ -19,9 +19,12 @@ pipeline {
                 '''
             }
         }
-        stage('test the application') {
+        stage('Ansible script') {
             steps {
-                echo "Test"
+                sh '''#!/bin/bash
+                . venv/bin/activate
+                ansible-playbook -i netbox_inv_02.yml generate_config.yml
+                '''
             }
         }
 
