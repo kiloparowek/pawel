@@ -1,37 +1,20 @@
 pipeline {
     agent any
     environment {
-        NETBOX_TOKEN = '2d13b3e7d3bdff08860575e61619046aab51cd40'
-        NETBOX_API   = 'http://192.168.1.7:8000/api/'
+        NETBOX_TOKEN = 'cf3ce18b328d0f6f8be8a543dfb26f7f873ebfd9'
+        NETBOX_API   = 'http://192.168.5.175:8000/api/'
     }
     stages {
-        stage('Checkout') {
+        stage('build the application') {
             steps {
-                git branch: 'main', 
-                    url: 'https://github.com/baltah666/pawel.git', 
-                    credentialsId: 'github-cred'
+                echo "Build"
             }
         }
-        stage('Setup Environment') {
+        stage('test the application') {
             steps {
-                sh '''#!/bin/bash
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install --upgrade pip
-                if [ -f requirements.txt ]; then
-                    pip install -r requirements.txt
-                fi
-                ansible-galaxy collection install netbox.netbox
-                '''
+                echo "Test"
             }
         }
-        stage('Run Automation Script') {
-            steps {
-                sh '''#!/bin/bash
-                . venv/bin/activate
-                ansible-playbook -i netbox_inv_02.yml generate_config.yml
-                '''
-            }
-        }
+
     }
 }
