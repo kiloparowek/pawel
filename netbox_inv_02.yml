@@ -1,6 +1,6 @@
 plugin: netbox.netbox.nb_inventory
-api_endpoint: http://192.168.1.7:8000/
-token: 2d13b3e7d3bdff08860575e61619046aab51cd40
+api_endpoint: http://192.168.5.175:8000/
+token: cf3ce18b328d0f6f8be8a543dfb26f7f873ebfd9
 validate_certs: False
 
 group_by:
