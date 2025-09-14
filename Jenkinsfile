@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sh '''#!/bin/bash
                 . venv/bin/activate
-                ansible-playbook -i netbox_inv_02.yml 
+                ansible-playbook -i netbox_inv_02.yml generate_config.yml
                 '''
             }
         }
