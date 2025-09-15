@@ -18,7 +18,7 @@ pipeline {
                 '''
             }
             setps {
-                echo "hello"
+                echo "hello pablo !"
             }
 
         }
