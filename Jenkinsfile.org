@@ -33,26 +33,5 @@ pipeline {
                 '''
             }
         }
-        stage('Push Generated Configs to GitHub') {
-            steps {
-                sh '''#!/bin/bash
-                # Configure Git user
-                git config --global user.email "baltah666@gmail.com"
-                git config --global user.name "baltah666"
-                
-                # Add safe directory (if needed)
-                git config --global --add safe.directory $WORKSPACE
-
-                # Stage only generated configs
-                git add configs/ netbox_inv.yml
-
-                # Commit if there are changes
-                git diff --cached --quiet || git commit -m "Update generated configuration files from Jenkins job"
-
-                # Push to main branch
-                git push origin main
-                '''
-            }
-        }
     }
 }
