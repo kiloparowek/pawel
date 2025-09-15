@@ -35,23 +35,27 @@ pipeline {
         }
         stage('Push Generated Configs to GitHub') {
             steps {
-                sh '''#!/bin/bash
-                # Configure Git user
-                git config --global user.email "baltah666@gmail.com"
-                git config --global user.name "baltah666"
-                
-                # Add safe directory (if needed)
-                git config --global --add safe.directory $WORKSPACE
+                withCredentials([usernamePassword(credentialsId: 'github-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                    sh '''#!/bin/bash
+                    # Ensure .git folder is writable
+                    chown -R jenkins:jenkins $WORKSPACE
+                    chmod -R u+rwX $WORKSPACE/.git
 
-                # Stage only generated configs
-                git add configs/ netbox_inv.yml
+                    # Configure git to use credentials
+                    git config user.name "Abdulilah Baltah"
+                    git config user.email "baltah666@gmail.com"
+                    git remote set-url origin https://$GIT_USER:$GIT_TOKEN@github.com/baltah666/pawel.git
 
-                # Commit if there are changes
-                git diff --cached --quiet || git commit -m "Update generated configuration files from Jenkins job"
-
-                # Push to main branch
-                git push origin main
-                '''
+                    # Add and commit changes if there are any
+                    git add .
+                    if ! git diff --cached --quiet; then
+                        git commit -m "Automated config update by Jenkins"
+                        git push origin main
+                    else
+                        echo "No changes to commit."
+                    fi
+                    '''
+                }
             }
         }
     }
