@@ -12,19 +12,28 @@ pipeline {
                     credentialsId: 'github-cred'
             }
         }
+
         stage('Setup Environment') {
             steps {
                 sh '''#!/bin/bash
-                python3 -m venv venv
+                # Create virtual environment if not exists
+                if [ ! -d venv ]; then
+                    python3 -m venv venv
+                fi
+
+                # Activate venv and install dependencies
                 . venv/bin/activate
                 pip install --upgrade pip
                 if [ -f requirements.txt ]; then
                     pip install -r requirements.txt
                 fi
-                ansible-galaxy collection install netbox.netbox
+
+                # Install NetBox collection (idempotent)
+                ansible-galaxy collection install netbox.netbox || true
                 '''
             }
         }
+
         stage('Run Automation Script') {
             steps {
                 sh '''#!/bin/bash
@@ -33,21 +42,22 @@ pipeline {
                 '''
             }
         }
+
         stage('Push Generated Configs to GitHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'github-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                     sh '''#!/bin/bash
-                    # Ensure .git folder is writable
-                    chown -R jenkins:jenkins $WORKSPACE
-                    chmod -R u+rwX $WORKSPACE/.git
-
-                    # Configure git to use credentials
+                    # Configure Git user
                     git config user.name "Abdulilah Baltah"
                     git config user.email "baltah666@gmail.com"
+
+                    # Set remote URL with token authentication
                     git remote set-url origin https://$GIT_USER:$GIT_TOKEN@github.com/baltah666/pawel.git
 
-                    # Add and commit changes if there are any
+                    # Add all generated files
                     git add .
+
+                    # Commit only if there are changes
                     if ! git diff --cached --quiet; then
                         git commit -m "Automated config update by Jenkins"
                         git push origin main
@@ -57,6 +67,12 @@ pipeline {
                     '''
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
         }
     }
 }
