@@ -38,15 +38,15 @@
           Authorization: "Token {{ netbox_token }}"
       register: site
 
-    # - name: 5 - Get List of VLANs for Site {{ device.json.results[0]['site']['name'] }}
-    #   uri:
-    #     url: "{{ netbox_url }}/ipam/vlans/?site_id={{ site.json.results[0]['id'] }}"
-    #     method: GET
-    #     return_content: yes
-    #     headers:
-    #       accept: "application/json"
-    #       Authorization: "Token {{ netbox_token }}"
-    #   register: vlans
+    - name: 5 - Get List of VLANs for Site {{ device.json.results[0]['site']['name'] }}
+      uri:
+        url: "{{ netbox_url }}/ipam/vlans/?site_id={{ site.json.results[0]['id'] }}"
+        method: GET
+        return_content: yes
+        headers:
+          accept: "application/json"
+          Authorization: "Token {{ netbox_token }}"
+      register: vlans
 
     - name: 6 - Create temporary folder for Device Configs
       file:
@@ -59,8 +59,8 @@
           - device
           - interfaces
           - ip_addresses
-          #- site
-          #- vlans
+          - site
+          - vlans
       loop: "{{ save_vars }}"
       loop_control:
         loop_var: var_name
