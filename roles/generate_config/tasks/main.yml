@@ -53,20 +53,20 @@
         dest: "{{ configs_directory }}/{{ inventory_hostname }}"
         state: directory
 
-    # - name: 7 - Save all registered variables to JSON files
-    #   vars:
-    #     save_vars:
-    #       - device
-    #       - interfaces
-    #       - ip_addresses
-    #       - site
-    #       - vlans
-    #   loop: "{{ save_vars }}"
-    #   loop_control:
-    #     loop_var: var_name
-    #   copy:
-    #     dest: "{{ configs_directory }}/{{ inventory_hostname }}/{{ var_name }}.json"
-    #     content: "{{ hostvars[inventory_hostname][var_name] | to_nice_json }}"
+    - name: 7 - Save all registered variables to JSON files
+      vars:
+        save_vars:
+          - device
+          - interfaces
+          - ip_addresses
+          #- site
+          #- vlans
+      loop: "{{ save_vars }}"
+      loop_control:
+        loop_var: var_name
+      copy:
+        dest: "{{ configs_directory }}/{{ inventory_hostname }}/{{ var_name }}.json"
+        content: "{{ hostvars[inventory_hostname][var_name] | to_nice_json }}"
 
     # - name: 8 - Create configuration files
     #   template:
