@@ -1,7 +1,7 @@
 ---
 - name: Generate Device Configuration
   connection: local
-  hosts: device_roles_access_switch,device_roles_distribution_switch 
+  hosts: device_roles_access_switch,device_roles_distribution_switch
   gather_facts: False
 
   roles:
