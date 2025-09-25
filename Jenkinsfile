@@ -15,6 +15,8 @@ pipeline {
                     pip install -r requirements.txt
                 fi
                 ansible-galaxy collection install netbox.netbox
+                export NETBOX_TOKEN="cf3ce18b328d0f6f8be8a543dfb26f7f873ebfd9"
+                export NETBOX_API="http://192.168.5.175:8000"
                 '''
             }
 
@@ -26,6 +28,7 @@ pipeline {
                 ansible-playbook -i netbox_inv_02.yml generate_config.yml
                 '''
             }
+            
         }
 
     }
