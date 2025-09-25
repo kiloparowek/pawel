@@ -17,9 +17,6 @@ pipeline {
                 ansible-galaxy collection install netbox.netbox
                 '''
             }
-            steps {
-                echo "hello pablo !"
-            }
 
         }
         stage('Ansible script') {
