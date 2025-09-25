@@ -68,13 +68,8 @@
         dest: "{{ configs_directory }}/{{ inventory_hostname }}/{{ var_name }}.json"
         content: "{{ hostvars[inventory_hostname][var_name] | to_nice_json }}"
 
-    # - name: 8 - Create configuration files
-    #   template:
-    #     src: "templates/{{ platforms[0] }}.j2"
-    #     dest: "{{ configs_directory }}/{{ inventory_hostname }}/{{ inventory_hostname }}.conf"
+    - name: 8 - Create configuration files
+      template:
+        src: "templates/{{ platforms[0] }}.j2"
+        dest: "{{ configs_directory }}/{{ inventory_hostname }}/{{ inventory_hostname }}.conf"
 
-    # - name: 9 - JUNOS BONUS PLAY!! - Create Junos config using Set Commands
-    #   template:
-    #     src: "templates/{{ platforms[0] }}-set.j2"
-    #     dest: "{{ configs_directory }}/{{ inventory_hostname }}/{{ inventory_hostname }}.set"
-    #   when: platforms[0] == 'juniper-junos'
