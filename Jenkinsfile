@@ -5,13 +5,31 @@ pipeline {
         NETBOX_API   = 'http://192.168.5.175:8000/api/'
     }
     stages {
-        stage('build the application') { 
-            setps {
+        stage('build the application') {
+            steps {
+                sh '''#!/bin/bash
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+                if [ -f requirements.txt ]; then
+                    pip install -r requirements.txt
+                fi
+                ansible-galaxy collection install netbox.netbox
+                '''
+            }
+            steps {
                 echo "hello pablo !"
             }
 
         }
-
+        stage('Ansible script') {
+            steps {
+                sh '''#!/bin/bash
+                . venv/bin/activate
+                ansible-playbook -i netbox_inv_02.yml generate_config.yml
+                '''
+            }
+        }
 
     }
 }
