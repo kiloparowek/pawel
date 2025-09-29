@@ -70,6 +70,15 @@ interface {{ intf.name }}
 !
 {% endfor %}
 !
+snmp-server community {{ device.json.results[0].config_context['snmp-ro-community'] }} RO
+{% set latitude = site.json.results[0]['latitude'] %}
+{% set longitude = site.json.results[0]['longitude'] %}
+{% if latitude and longitude %}
+snmp-server location {{ site.json.results[0]['region']['name'] }} [{{ latitude }},{{ longitude }}]
+{% else %}
+snmp-server location {{ site.json.results[0]['region']['name'] }}
+{% endif %}
+!
 logging source-interface GigabitEthernet0
 {% for syslog_server in device.json.results[0].config_context['syslog-servers'] %}
 logging host {{ syslog_server }} transport udp port 1514
